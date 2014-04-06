@@ -11,7 +11,7 @@ Works for anything included with href, src, or url attributes
                       newDomain: 'www.thenewdomain.com',
                       oldDomain : 'www.theolddomain.com',
                       docRoot : 'public_html',
-                      filetypes : ['jpg','jpeg','png','pdf', 'js', 'css']
+                      filetypes : ['jpg','jpeg','png','ico','gif','js','css']
                      }))
                     .pipe(gulp.dest('../dist'));
         });

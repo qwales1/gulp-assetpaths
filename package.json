@@ -8,7 +8,8 @@
     "images",
     "domains",
     "assets",
-    "urls"
+    "urls",
+    "paths"
   ],
   "author": {
     "name": "Chris Wales",
