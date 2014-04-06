@@ -22,15 +22,28 @@ the new environment path
 
 ### options.oldDomain 
 
-the old path to replace. 
+the old path to replace. this is only used if you are using full paths to assets. `https://www.oldDomain.com/images/image.png` Anything that doesn't match this domain will be ignored so if you use CDNs for third party code those paths will not be changed.
 
 ### options.docRoot
 
-this will anchor all relative paths to the document root of the project. An example would be in css you might include 
-``url(images/example.png)`` in a selector. By setting the docRoot property all the directories up to the document root will be prepended to the images/example.png path giving you:
+this will anchor all relative paths to the document root of the project. An example would be in your css file you include 
+``url(images/example.png)`` in a selector. All the directories up to the document root will be prepended to the images/example.png path giving you:
 ``url(http://www.thenewdomain.com/css/images/example.png)``
 
 
 ### options.filetypes
 
 Array of filetypes to change the path for.
+
+## Use
+
+I used this to convert websites to start serving their static assets from a CDN. 
+
+NOTE: This plugin assumes that any paths in a database or other other data sources are relative to the root directory if you are using server side or client side templating. Full paths in the database will give you the wrong path.
+
+``/assets/images/image.png - OK``
+``http://www.oldDomain.com/assets/images/image.png - FAIL``
+``assets/images/image.png - FAIL``
+
+Again that is only for dynamically generated paths. All of those in code will be replaced correctly.
+

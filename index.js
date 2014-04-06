@@ -25,6 +25,8 @@
    var img = /(<\s*){0,1}(\bimg)/;
    //matches url in css
    var url = /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/;
+   //matches script tag
+   var script = /(<\s*){0,1}(\bscript)/;
    var attrsAndProps = [{ exp : /\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\2)/gi, captureGroup : 1},
                         { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, captureGroup : 3},
                         { exp : /((<\s*){0,1}\bimg){0,1}\s*\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\4)/gi, captureGroup : 3}];
@@ -47,10 +49,13 @@
    }
    return false;
  }
+ function replacementCheck(cGroup, match){
+    return filetypes.test(cGroup) || img.test(match) || url.test(match) || script.test(match);
+ }
  function processLine(line, regEx, file){
      line = line.replace(regEx.exp, function(match){
        var cGroup = arguments[regEx.captureGroup];
-       if(filetypes.test(cGroup) || img.test(match) || url.test(match)){
+       if(replacementCheck(cGroup, match)){
          if(!ignoreUrl(cGroup)){
            return match.replace(cGroup, function(match){
              match = match.replace(rootRegEx, "").trim();
