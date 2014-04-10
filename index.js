@@ -27,7 +27,8 @@
    var url = /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/;
    //matches script tag
    var script = /(<\s*){0,1}(\bscript)/;
-   var attrsAndProps = [{ exp : /\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\2)/gi, captureGroup : 1},
+   var href = /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/;
+   var attrsAndProps = [{ exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)\/>/gi, captureGroup : 3},
                         { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, captureGroup : 3},
                         { exp : /((<\s*){0,1}\bimg){0,1}(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, captureGroup : 4}];
 
@@ -50,7 +51,7 @@
    return false;
  }
  function replacementCheck(cGroup, match){
-    return filetypes.test(cGroup) || img.test(match) || url.test(match) || script.test(match);
+    return filetypes.test(cGroup) || img.test(match) || url.test(match) || script.test(match) || href.test(match);
  }
  function processLine(line, regEx, file){
      line = line.replace(regEx.exp, function(match){
