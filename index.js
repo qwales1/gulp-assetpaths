@@ -29,7 +29,7 @@
    var script = /(<\s*){0,1}(\bscript)/;
    var attrsAndProps = [{ exp : /\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\2)/gi, captureGroup : 1},
                         { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, captureGroup : 3},
-                        { exp : /((<\s*){0,1}\bimg){0,1}\s*\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\4)/gi, captureGroup : 3}];
+                        { exp : /((<\s*){0,1}\bimg){0,1}(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, captureGroup : 4}];
 
  function isRelative(string, insertIndex){
   return (string.indexOf('/') === -1 || string.indexOf('/') > insertIndex) ? true : false;
