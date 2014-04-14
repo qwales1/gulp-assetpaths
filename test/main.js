@@ -14,31 +14,31 @@ var gutil = require("gulp-util"),
 describe("gulp-assetpaths", function () {
 
 	var expectedTest = new gutil.File({
-		path: "test/expected/test.html",
+		path: "test/expected/staticpaths.html",
 		cwd: "test/",
 		base: "test/expected",
-		contents: fs.readFileSync("test/expected/test.html")
+		contents: fs.readFileSync("test/expected/staticpaths.html")
 	});
 	var expectedTemplating = new gutil.File({
-		path: "test/expected/test.html",
+		path: "test/expected/staticpaths.html",
 		cwd: "test/",
 		base: "test/expected",
-		contents: fs.readFileSync("test/expected/templating.html")
+		contents: fs.readFileSync("test/expected/dynamicpaths.html")
 	});
 
 	it("should produce expected file via buffer", function (done) {
 
 		var srcFile = new gutil.File({
-			path: "test/fixtures/test.html",
+			path: "test/fixtures/staticpaths.html",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: fs.readFileSync("test/fixtures/test.html")
+			contents: fs.readFileSync("test/fixtures/staticpaths.html")
 		});
 		var srcFile = new gutil.File({
-			path: "test/fixtures/test.html",
+			path: "test/fixtures/staticpaths.html",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: fs.readFileSync("test/fixtures/test.html")
+			contents: fs.readFileSync("test/fixtures/staticpaths.html")
 		});
 
 		var stream = assetpaths(
@@ -66,10 +66,10 @@ describe("gulp-assetpaths", function () {
 	it("should produce expected file via buffer", function (done) {
 
 		var srcFile = new gutil.File({
-			path: "test/fixtures/templating.html",
+			path: "test/fixtures/dynamicpaths.html",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: fs.readFileSync("test/fixtures/templating.html")
+			contents: fs.readFileSync("test/fixtures/dynamicpaths.html")
 		});
 
 		var stream = assetpaths(
@@ -99,10 +99,10 @@ describe("gulp-assetpaths", function () {
 	it("should error on stream", function (done) {
 
 		var srcFile = new gutil.File({
-			path: "test/fixtures/test.html",
+			path: "test/fixtures/dynamicpaths.html",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: fs.createReadStream("test/fixtures/test.html")
+			contents: fs.createReadStream("test/fixtures/dynamicpaths.html")
 		});
 		var stream = assetpaths(
 			    {oldDomain : 'www.oldDomain.com',
