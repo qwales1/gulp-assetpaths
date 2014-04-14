@@ -51,8 +51,6 @@
    return false;
  }
  function replacementCheck(cGroup, match){
-    console.log('match : ', match);
-    console.log('cGroup : ', cGroup);
     return filetypes.test(cGroup) || img.test(match) || url.test(match) || script.test(match) || href.test(match);
  }
  function processLine(line, regEx, file){
