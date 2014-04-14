@@ -5,3 +5,5 @@
 background: url(<% imagepath %>)
 background-image : url(<%= imagepath %>)
 <a href="<%= assetpathYo %>" download="<%= assetname %>" />
+$pattern = '/src="(.*js)"/';
+$replacement = 'src="restylegc-js.php?$1"';
