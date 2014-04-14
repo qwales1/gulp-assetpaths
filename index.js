@@ -28,7 +28,7 @@
    //matches script tag
    var script = /(<\s*){0,1}(\bscript)(.*?)\bsrc\s*=\s*/;
    var href = /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/;
-   var attrsAndProps = [{ exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)\/>/gi, captureGroup : 3},
+   var attrsAndProps = [{ exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi, captureGroup : 3},
                         { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, captureGroup : 3},
                         { exp : /((<\s*){0,1}\bimg|\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, captureGroup : 4}];
 
