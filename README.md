@@ -18,11 +18,11 @@ Works for anything included with href, src, or url attributes
         
 ### options.newDomain 
 
-the new environment path
+the new domain
 
 ### options.oldDomain 
 
-the old path to replace. Anything that doesn't match this domain will be ignored so if you use CDNs for third party code those paths will not be changed.
+the old domain to replace if it was a full path. Anything that doesn't match this domain will be ignored so if you use CDNs for third party code those paths will not be changed.
 
 ### options.docRoot
 
@@ -47,5 +47,5 @@ NOTE: This plugin assumes that any paths in a database or other other data sourc
 
 ``assets/images/image.png - FAIL``
 
-Again that is only for dynamically generated paths. All of those in code will be replaced correctly.
+Again that is only for dynamically generated paths. All of those examples in code will be replaced correctly.
 
