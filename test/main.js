@@ -13,19 +13,36 @@ var gutil = require("gulp-util"),
 
 describe("gulp-assetpaths", function () {
 
-	var expectedTest = new gutil.File({
+	var expectedStatic = new gutil.File({
 		path: "test/expected/staticpaths.html",
 		cwd: "test/",
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/staticpaths.html")
 	});
-	var expectedTemplating = new gutil.File({
+	var expectedDynamic = new gutil.File({
 		path: "test/expected/staticpaths.html",
 		cwd: "test/",
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/dynamicpaths.html")
 	});
-
+	var expectedTemplates = new gutil.File({
+		path: "test/expected/templates.js",
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/templates.js")
+	});
+	var expectedNoJS = new gutil.File({
+		path: "test/expected/nojs.html",
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/nojs.html")
+	});
+	var expectedNoCSS = new gutil.File({
+		path: "test/expected/nocss.css",
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/nocss.css")
+	});
 	it("should produce expected file via buffer", function (done) {
 
 		var srcFile = new gutil.File({
@@ -34,18 +51,13 @@ describe("gulp-assetpaths", function () {
 			base: "test/fixtures",
 			contents: fs.readFileSync("test/fixtures/staticpaths.html")
 		});
-		var srcFile = new gutil.File({
-			path: "test/fixtures/staticpaths.html",
-			cwd: "test/",
-			base: "test/fixtures",
-			contents: fs.readFileSync("test/fixtures/staticpaths.html")
-		});
-
+		
 		var stream = assetpaths(
 				{oldDomain : 'www.oldDomain.com',
 				 newDomain : 'https://www.newDomain.com',
 				 docRoot : 'test',
-				 filetypes : ['jpg', 'png', 'js', 'css']
+				 filetypes : ['jpg', 'png', 'js', 'css'],
+				 templates : true
 				});
 
 		stream.on("error", function(err) {
@@ -57,7 +69,7 @@ describe("gulp-assetpaths", function () {
 
 			should.exist(newFile);
 			should.exist(newFile.contents);
-			String(newFile.contents).should.equal(String(expectedTest.contents));
+			String(newFile.contents).should.equal(String(expectedStatic.contents));
 			done();
 		});
 		stream.write(srcFile);
@@ -76,7 +88,8 @@ describe("gulp-assetpaths", function () {
 				{oldDomain : 'www.oldDomain.com',
 				 newDomain : 'https://www.newDomain.com',
 				 docRoot : 'test',
-				 filetypes : ['jpg', 'png', 'js', 'css']
+				 filetypes : ['jpg', 'png', 'css'],
+				 templates : true
 				});
 
 		stream.on("error", function(err) {
@@ -88,14 +101,110 @@ describe("gulp-assetpaths", function () {
 
 			should.exist(newFile);
 			should.exist(newFile.contents);
-			String(newFile.contents).should.equal(String(expectedTemplating.contents));
+			String(newFile.contents).should.equal(String(expectedDynamic.contents));
 			done();
 		});
 
 		stream.write(srcFile);
 		stream.end();
 	});
+	it("should produce expected file via buffer", function (done) {
 
+		var srcFile = new gutil.File({
+			path: "test/fixtures/nojs.html",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: fs.readFileSync("test/fixtures/templates.js")
+		});
+
+		var stream = assetpaths(
+				{oldDomain : 'www.oldDomain.com',
+				 newDomain : 'https://www.newDomain.com',
+				 docRoot : 'test',
+				 filetypes : ['jpg', 'png', 'css'],
+				 templates : true
+				});
+
+		stream.on("error", function(err) {
+			should.exist(err);
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+
+			should.exist(newFile);
+			should.exist(newFile.contents);
+			String(newFile.contents).should.equal(String(expectedTemplates.contents));
+			done();
+		});
+
+		stream.write(srcFile);
+		stream.end();
+	});
+	it("should produce expected file via buffer", function (done) {
+
+		var srcFile = new gutil.File({
+			path: "test/fixtures/nocss.css",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: fs.readFileSync("test/fixtures/nocss.css")
+		});
+		var stream = assetpaths(
+				{oldDomain : 'www.oldDomain.com',
+				 newDomain : 'https://www.newDomain.com',
+				 docRoot : 'test',
+				 filetypes : ['jpg', 'png', 'js'],
+				 noTemplates : true
+				});
+
+		stream.on("error", function(err) {
+			should.exist(err);
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+
+			should.exist(newFile);
+			should.exist(newFile.contents);
+			String(newFile.contents).should.equal(String(expectedNoCSS.contents));
+			done();
+		});
+
+		stream.write(srcFile);
+		stream.end();
+	});
+	it("should produce expected file via buffer", function (done) {
+
+		var srcFile = new gutil.File({
+			path: "test/fixtures/nojs.html",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: fs.readFileSync("test/fixtures/nojs.html")
+		});
+		var stream = assetpaths(
+				{oldDomain : 'www.oldDomain.com',
+				 newDomain : 'https://www.newDomain.com',
+				 docRoot : 'test',
+				 filetypes : ['jpg', 'png', 'css'],
+				 noTemplates : true
+				});
+
+		stream.on("error", function(err) {
+			should.exist(err);
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+
+			should.exist(newFile);
+			should.exist(newFile.contents);
+			String(newFile.contents).should.equal(String(expectedNoJS.contents));
+			done();
+		});
+
+		stream.write(srcFile);
+		stream.end();
+	});
 	it("should error on stream", function (done) {
 
 		var srcFile = new gutil.File({
@@ -124,6 +233,8 @@ describe("gulp-assetpaths", function () {
 		stream.write(srcFile);
 		stream.end();
 	});
+
+
 
 	/*
 	it("should produce expected file via stream", function (done) {

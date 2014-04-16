@@ -1,0 +1,4 @@
+.foo {
+	
+	background: url(<?php echo $preProcessor?; ?>);
+}
