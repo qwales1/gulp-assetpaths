@@ -45,7 +45,15 @@
   return (string.indexOf('/') === -1 || string.indexOf('/') > insertIndex) ? true : false;
  }
  function getInsertIndex(string){
-  return string.search(/^.{0,1}\s*("|')/) === -1 ? 1 : (string.search(/"|'/)+1);
+  if(string.search(/^.{0,1}\s*("|')/) !== -1){
+     //check to see if template not using interpolated strings
+     var nonInter = /["|']\s*[+|.]/.exec(string);
+     if(nonInter){
+      return string.search(/"|'/) === nonInter.index ? nonInter.index : (nonInter.index-1)
+     }
+     return (string.search(/"|'/)+1);
+  }
+  return 1;
  }
  function insertAtIndex(string, fragment, index){
   return [string.slice(0, index), fragment, string.slice(index)].join("");
@@ -91,7 +99,7 @@
    var index = getInsertIndex(string);
    if(isRelative(string,index)){
      //if the path isn't being dynamically generated(i.e. server or in template)
-     if(!(/^\s*[\(]{0,1}\s*["|']{0,1}\s*[<]/.test(string))){
+     if(!(/^\s*[\(]{0,1}\s*["|']{0,1}\s*[<|{|.|+]/.test(string))){
        if(opts.docRoot){
          var currentPath = string.split("/");
          var relDirs = countRelativeDirs(currentPath);
