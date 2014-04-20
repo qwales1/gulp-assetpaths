@@ -11,7 +11,8 @@ Works for anything included with href, src, or url attributes
                       newDomain: 'www.thenewdomain.com',
                       oldDomain : 'www.theolddomain.com',
                       docRoot : 'public_html',
-                      filetypes : ['jpg','jpeg','png','ico','gif','js','css']
+                      filetypes : ['jpg','jpeg','png','ico','gif','js','css'],
+                      templates: true;
                      }))
                     .pipe(gulp.dest('../dist'));
         });
@@ -30,21 +31,15 @@ this will anchor all relative paths to the document root of your project. An exa
 ``url(images/example.png)`` in a selector. All the directories up to the document root will be prepended to the images/example.png path giving you:
 ``url(http://www.thenewdomain.com/css/images/example.png)``
 
-### options.noTemplates - boolean
+### options.templates - boolean (true by default)
 
-If this option is true, only paths to filetypes that are explicitly in the filetypes array will be replaced.
+If this option is false, only paths to filetypes that are explicitly in the filetypes array will be replaced.
 
-If omitted, it will attempt to replace paths to static assets in templates. These paths will be changed : 
+If ture, it will attempt to replace paths to static assets in templates. These paths will be changed : 
 
-image tags
-``<img src="<%= image.path %>">``
-***
-css background or background-image properties
-``background : url(<?php echo $imagePath; ?>) OR background-image: url(<?php echo $imagePath; ?>)``
-***
-script tags
-``<script src="<%= someScriptPath %>">``
-***
+all image tags 
+all css background or background-image properties
+all script tags
 tags that have a href attribute with a download attribute in the same tag
 ``<a href="<?php echo $myDownloadableThing; ?>" download="foo">``
 
@@ -52,9 +47,6 @@ tags that have a href attribute with a download attribute in the same tag
 ### options.filetypes
 
 Array of filetypes to change the path for. 
-
-
-
 
 
 ## Use

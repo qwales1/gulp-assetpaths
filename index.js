@@ -68,7 +68,7 @@
    return false;
  }
  function replacementCheck(cGroup, match, regEx){
-    if(opts.noTemplates){
+    if(!opts.templates){
        return filetypes.test(cGroup);
     }
     return filetypes.test(cGroup) || regEx.templateCheck.test(match);
