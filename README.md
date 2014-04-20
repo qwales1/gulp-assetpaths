@@ -16,24 +16,46 @@ Works for anything included with href, src, or url attributes
                     .pipe(gulp.dest('../dist'));
         });
         
-### options.newDomain 
+### options.newDomain - string
 
-the new environment path
+the new domain
 
-### options.oldDomain 
+### options.oldDomain - string
 
-the old path to replace. Anything that doesn't match this domain will be ignored so if you use CDNs for third party code those paths will not be changed.
+the old domain to replace if it was a full path. Anything that doesn't match this domain will be ignored so if you use CDNs for third party code those paths will not be changed.
 
-### options.docRoot
+### options.docRoot - string
 
 this will anchor all relative paths to the document root of your project. An example would be in your css file you include 
 ``url(images/example.png)`` in a selector. All the directories up to the document root will be prepended to the images/example.png path giving you:
 ``url(http://www.thenewdomain.com/css/images/example.png)``
 
+### options.noTemplates - boolean
+
+If this option is true, only paths to filetypes that are explicitly in the filetypes array will be replaced.
+
+If omitted, it will attempt to replace paths to static assets in templates. These paths will be changed : 
+
+image tags
+``<img src="<%= image.path %>">``
+***
+css background or background-image properties
+``background : url(<?php echo $imagePath; ?>) OR background-image: url(<?php echo $imagePath; ?>)``
+***
+script tags
+``<script src="<%= someScriptPath %>">``
+***
+tags that have a href attribute with a download attribute in the same tag
+``<a href="<?php echo $myDownloadableThing; ?>" download="foo">``
+
 
 ### options.filetypes
 
-Array of filetypes to change the path for.
+Array of filetypes to change the path for. 
+
+
+
+
 
 ## Use
 
@@ -47,5 +69,5 @@ NOTE: This plugin assumes that any paths in a database or other other data sourc
 
 ``assets/images/image.png - FAIL``
 
-Again that is only for dynamically generated paths. All of those in code will be replaced correctly.
+Again that is only for dynamically generated paths. All of those examples in code will be replaced correctly.
 

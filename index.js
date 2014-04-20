@@ -21,22 +21,39 @@
    }
    var rootRegEx  =  new RegExp('(((\\bhttp\|\\bhttps):){0,1}\\/\\/' + opts.oldDomain + ')');
    var filetypes = new RegExp('.' + opts.filetypes.join('|.'));
-   //matches img tag
-   var img = /(<\s*){0,1}(\bimg)(.*?)\bsrc\s*=\s*/;
-   //matches url in css
-   var url = /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/;
-   //matches script tag
-   var script = /(<\s*){0,1}(\bscript)(.*?)\bsrc\s*=\s*/;
-   var href = /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/;
-   var attrsAndProps = [{ exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi, captureGroup : 3},
-                        { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, captureGroup : 3},
-                        { exp : /((<\s*){0,1}\bimg|\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, captureGroup : 4}];
+
+   var attrsAndProps = [
+                        { exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi, 
+                          captureGroup : 3, 
+                          templateCheck : /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/
+                        },
+                        { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, 
+                          captureGroup : 3,
+                          templateCheck : /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/
+                        },
+                        { exp : /((<\s*){0,1}\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, 
+                          captureGroup : 4,
+                          templateCheck : /(<\s*){0,1}(\bscript)(.*?)\bsrc\s*=\s*/
+                        },
+                        { exp : /((<\s*){0,1}\bimg)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, 
+                          captureGroup : 4,
+                          templateCheck : /(<\s*){0,1}(\bimg)(.*?)\bsrc\s*=\s*/
+                        }
+                      ];
 
  function isRelative(string, insertIndex){
   return (string.indexOf('/') === -1 || string.indexOf('/') > insertIndex) ? true : false;
  }
  function getInsertIndex(string){
-  return string.search(/^.{0,1}\s*("|')/) === -1 ? 1 : (string.search(/"|'/)+1);
+  if(string.search(/^.{0,1}\s*("|')/) !== -1){
+     //check to see if template not using interpolated strings
+     var nonInter = /["|']\s*[+|.]/.exec(string);
+     if(nonInter){
+      return string.search(/"|'/) === nonInter.index ? nonInter.index : (nonInter.index-1)
+     }
+     return (string.search(/"|'/)+1);
+  }
+  return 1;
  }
  function insertAtIndex(string, fragment, index){
   return [string.slice(0, index), fragment, string.slice(index)].join("");
@@ -50,13 +67,16 @@
    }
    return false;
  }
- function replacementCheck(cGroup, match){
-    return filetypes.test(cGroup) || img.test(match) || url.test(match) || script.test(match) || href.test(match);
+ function replacementCheck(cGroup, match, regEx){
+    if(opts.noTemplates){
+       return filetypes.test(cGroup);
+    }
+    return filetypes.test(cGroup) || regEx.templateCheck.test(match);
  }
  function processLine(line, regEx, file){
      line = line.replace(regEx.exp, function(match){
        var cGroup = arguments[regEx.captureGroup];
-       if(replacementCheck(cGroup, match)){
+       if(replacementCheck(cGroup, match, regEx)){
          if(!ignoreUrl(cGroup)){
            return match.replace(cGroup, function(match){
              match = match.replace(rootRegEx, "").trim();
@@ -79,7 +99,7 @@
    var index = getInsertIndex(string);
    if(isRelative(string,index)){
      //if the path isn't being dynamically generated(i.e. server or in template)
-     if(!(/^\s*[\(]{0,1}\s*["|']{0,1}\s*[<]/.test(string))){
+     if(!(/^\s*[\(]{0,1}\s*["|']{0,1}\s*[<|{|.|+]/.test(string))){
        if(opts.docRoot){
          var currentPath = string.split("/");
          var relDirs = countRelativeDirs(currentPath);
