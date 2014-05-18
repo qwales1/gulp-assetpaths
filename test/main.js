@@ -19,6 +19,12 @@ describe("gulp-assetpaths", function () {
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/staticpaths.html")
 	});
+	var expectedStaticNested = new gutil.File({
+		path: "test/expected/nested/staticpaths.html",
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/nested/staticpaths.html")
+	});
 	var expectedDynamic = new gutil.File({
 		path: "test/expected/staticpaths.html",
 		cwd: "test/",
@@ -43,7 +49,7 @@ describe("gulp-assetpaths", function () {
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/nocss.css")
 	});
-	it("should produce expected file via buffer", function (done) {
+	it("should produce expected file via buffer static", function (done) {
 
 		var srcFile = new gutil.File({
 			path: "test/fixtures/staticpaths.html",
@@ -51,7 +57,7 @@ describe("gulp-assetpaths", function () {
 			base: "test/fixtures",
 			contents: fs.readFileSync("test/fixtures/staticpaths.html")
 		});
-		
+
 		var stream = assetpaths(
 				{oldDomain : 'www.oldDomain.com',
 				 newDomain : 'https://www.newDomain.com',
@@ -70,6 +76,38 @@ describe("gulp-assetpaths", function () {
 			should.exist(newFile);
 			should.exist(newFile.contents);
 			String(newFile.contents).should.equal(String(expectedStatic.contents));
+			done();
+		});
+		stream.write(srcFile);
+		stream.end();
+	});
+	it("should produce expected file via buffer", function (done) {
+
+		var srcFile = new gutil.File({
+			path: "test/fixtures/nested/staticpaths.html",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: fs.readFileSync("test/fixtures/nested/staticpaths.html")
+		});
+
+		var stream = assetpaths(
+				{oldDomain : 'www.oldDomain.com',
+				newDomain : 'https://www.newDomain.com',
+				docRoot : 'test',
+				filetypes : ['jpg', 'png', 'js', 'css'],
+				templates : true
+				});
+
+		stream.on("error", function(err) {
+			should.exist(err);
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+
+			should.exist(newFile);
+			should.exist(newFile.contents);
+			String(newFile.contents).should.equal(String(expectedStaticNested.contents));
 			done();
 		});
 		stream.write(srcFile);

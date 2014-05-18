@@ -23,19 +23,19 @@
    var filetypes = new RegExp('.' + opts.filetypes.join('|.'));
 
    var attrsAndProps = [
-                        { exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi, 
-                          captureGroup : 3, 
+                        { exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi,
+                          captureGroup : 3,
                           templateCheck : /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/
                         },
-                        { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi, 
+                        { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi,
                           captureGroup : 3,
                           templateCheck : /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/
                         },
-                        { exp : /((<\s*){0,1}\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, 
+                        { exp : /((<\s*){0,1}\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi,
                           captureGroup : 4,
                           templateCheck : /(<\s*){0,1}(\bscript)(.*?)\bsrc\s*=\s*/
                         },
-                        { exp : /((<\s*){0,1}\bimg)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi, 
+                        { exp : /((<\s*){0,1}\bimg)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi,
                           captureGroup : 4,
                           templateCheck : /(<\s*){0,1}(\bimg)(.*?)\bsrc\s*=\s*/
                         }
@@ -47,7 +47,7 @@
  function getInsertIndex(string){
   if(string.search(/^.{0,1}\s*("|')/) !== -1){
      //check to see if template not using interpolated strings
-     var nonInter = /["|']\s*[+|.]/.exec(string);
+     var nonInter = /["|']\s*[+|.][^.]/.exec(string);
      if(nonInter){
       return string.search(/"|'/) === nonInter.index ? nonInter.index : (nonInter.index-1)
      }
@@ -99,16 +99,18 @@
    var index = getInsertIndex(string);
    if(isRelative(string,index)){
      //if the path isn't being dynamically generated(i.e. server or in template)
-     if(!(/^\s*[\(]{0,1}\s*["|']{0,1}\s*[<|{|.|+]/.test(string))){
+     if(!(/^\s*[\(]{0,1}\s*["|']{0,1}\s*[<|{|.|+][^.]/.test(string))){
        if(opts.docRoot){
          var currentPath = string.split("/");
          var relDirs = countRelativeDirs(currentPath);
-         string = string.replace('../', "");             
-         var fullPath = file.path.split("/").reverse().slice(1+relDirs);
+         string = string.replace(/\.\.\//g,"");
+         relDirs = relDirs > 0 ? relDirs : relDirs+1;
+         var fullPath = file.path.split("/").reverse().slice(relDirs);
+
          if(fullPath.indexOf(opts.docRoot) !== -1){
            while(fullPath[0] !== opts.docRoot){
              string = insertAtIndex(string, fullPath[0] + '/', index);
-             fullPath = fullPath.slice(1); 
+             fullPath = fullPath.slice(1);
            }
          }
        }
