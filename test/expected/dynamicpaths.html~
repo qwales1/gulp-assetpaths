@@ -1,0 +1,23 @@
+<img src="https://www.newDomain.com/<?php echo $imagePath ?>" />
+<img src="https://www.newDomain.com/<%= obj.imagePath %>" />
+<script src="https://www.newDomain.com/<% scriptname %>" />
+<img style="display:none;" src="https://www.newDomain.com/<%= obj.imagePath %>" />
+background: url(https://www.newDomain.com/<% imagepath %>)
+background-image : url(https://www.newDomain.com/<%= imagepath %>)
+<a href="https://www.newDomain.com/<%= assetpath %>" download="<%= assetname %>" />
+$pattern = '/src="(.*js)"/';
+$replacement = 'src="restylegc-js.php?$1"';
+<a href="https://www.oldDomain.com/<?php echo $test; ?>">TEST</a>
+<a href="/cart_checkout.php"><img src="https://www.newDomain.com/images/navigation_cart.png" alt="Shopping cart" width="30" height="33" />
+<link rel="stylesheet" href="https://www.newDomain.com/css/pages/products/<?php echo $thisPage; ?>.css" type="text/css" />
+<img src="https://www.newDomain.com/{{object.image}}" />
+function my_custom_login_logo()
+{
+  document.write('<style  type="text/css"> .login h1 a {  background-image:url(https://www.newDomain.com/' + get_imagepath('template_directory') + ')  !important;} </style>';
+}
+add_action('login_head',  'my_custom_login_logo');
+function my_custom_login_logo()
+{
+  echo '<style  type="text/css"> .login h1 a {  background-image:url(https://www.newDomain.com/'.get_imagepath('template_directory').')  !important;} </style>';
+}
+add_action('login_head',  'my_custom_login_logo');

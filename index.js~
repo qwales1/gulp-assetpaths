@@ -120,6 +120,9 @@
          if(fullPath.indexOf(opts.docRoot) !== -1){
            while(fullPath[0] !== opts.docRoot){
              string = insertAtIndex(string, fullPath[0] + '/', index);
+             if(isRelative(opts.oldDomain){
+
+             }
              fullPath = fullPath.slice(1);
            }
          }
