@@ -258,7 +258,7 @@ describe("gulp-assetpaths", function () {
 			contents: fs.readFileSync("test/fixtures/oldDomainRel.html")
 		});
 		var stream = assetpaths(
-				{oldDomain : '../assets/cool',
+				{oldDomain : '../assets',
 				 newDomain : '//www.newDomain.com',
 				 docRoot : 'test',
 				 filetypes : ['jpg', 'png', 'css'],
