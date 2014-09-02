@@ -49,11 +49,17 @@ describe("gulp-assetpaths", function () {
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/nocss.css")
 	});
-        var oldDomainRel = new gutil.File({
+  var oldDomainRel = new gutil.File({
 		path: "test/expected/oldDomainRel.html",
 		cwd: "test/",
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/oldDomainRel.html")
+	});
+	var expectedJSON = new gutil.File({
+		path: "test/expected/test.json",
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/test.json")
 	});
 	it("should produce expected file via buffer static", function (done) {
 
@@ -249,7 +255,7 @@ describe("gulp-assetpaths", function () {
 		stream.write(srcFile);
 		stream.end();
 	});
-        it("should allow relative path in oldDomain option", function (done) {
+  it("should allow relative path in oldDomain option", function (done) {
 
 		var srcFile = new gutil.File({
 			path: "test/fixtures/oldDomainRel.html",
@@ -281,7 +287,38 @@ describe("gulp-assetpaths", function () {
 		stream.write(srcFile);
 		stream.end();
 	});
+	it("should change the paths in a json file", function (done) {
 
+		var srcFile = new gutil.File({
+			path: "test/fixtures/test.json",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: fs.readFileSync("test/fixtures/test.json")
+		});
+		var stream = assetpaths(
+				{oldDomain : 'https://www.oldDomain.com',
+				newDomain : 'https://www.newDomain.com',
+				docRoot : 'test',
+				filetypes : ['jpg', 'png', 'css'],
+				noTemplates : true
+				});
+
+		stream.on("error", function(err) {
+			should.exist(err);
+			done(err);
+		});
+
+		stream.on("data", function (newFile) {
+
+			should.exist(newFile);
+			should.exist(newFile.contents);
+			String(newFile.contents).should.equal(String(expectedJSON.contents));
+			done();
+		});
+
+		stream.write(srcFile);
+		stream.end();
+	});
 	it("should error on stream", function (done) {
 
 		var srcFile = new gutil.File({

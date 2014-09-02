@@ -22,34 +22,37 @@
    if(!opts.docRoot){
      throw new gutil.PluginError("gulp-assetpaths", "Missing parameter : docRoot");
    }
-    
+
    var filetypes = new RegExp('.' + opts.filetypes.join('|.'));
    var rootRegEx = setReplacementDomain(opts.oldDomain);
    var attrsAndProps = [
-                        { exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi,
-                          captureGroup : 3,
-                          templateCheck : /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/
-                        },
-                        { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi,
-                          captureGroup : 3,
-                          templateCheck : /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/
-                        },
-                        { exp : /((<\s*){0,1}\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi,
-                          captureGroup : 4,
-                          templateCheck : /(<\s*){0,1}(\bscript)(.*?)\bsrc\s*=\s*/
-                        },
-                        { exp : /((<\s*){0,1}\bimg)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi,
-                          captureGroup : 4,
-                          templateCheck : /(<\s*){0,1}(\bimg)(.*?)\bsrc\s*=\s*/
-                        }
-                      ];
+    { exp : /(<\s*)(.*?)\bhref\s*=\s*((["{0,1}|'{0,1}]).*?\4)(.*?)>/gi,
+      captureGroup : 3,
+      templateCheck : /((\bdownload)(?=(.*?)\bhref\s*=))|((\bhref\s*=)(?=(.*?)\bdownload))/
+    },
+    { exp : /((\bbackground|\bbackground-image)\s*:\s*?.*){0,1}\burl\s*((\(\s*[^\w]{0,1}(["{0,1}'{0,1}]{0,1})).*?\5\))/gi,
+      captureGroup : 3,
+      templateCheck : /((\bbackground|\bbackground-image)\s*:\s*?.*)\burl\s*\(.*?\)/
+    },
+    { exp : /((<\s*){0,1}\bscript)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi,
+      captureGroup : 4,
+      templateCheck : /(<\s*){0,1}(\bscript)(.*?)\bsrc\s*=\s*/
+    },
+    { exp : /((<\s*){0,1}\bimg)(.*?)\bsrc\s*=\s*((["{0,1}|'{0,1}]).*?\5)/gi,
+      captureGroup : 4,
+      templateCheck : /(<\s*){0,1}(\bimg)(.*?)\bsrc\s*=\s*/
+    },
+    { exp: /(:\s("(.*?)"))/gi,
+      captureGroup : 2,
+      templateCheck: false
+    }];
  function setReplacementDomain(string){
   if(isRelative(opts.oldDomain)){
     return new RegExp('(((\\bhttp\|\\bhttps):){0,1}\\/\\/' + string + ')');
-  } else {	
+  } else {
     return new RegExp(string);
   }
-  
+
  }
  function isRelative(string, insertIndex){
   return (string.indexOf('/') === -1 || string.indexOf('/') > insertIndex) ? true : false;
@@ -81,7 +84,11 @@
     if(!opts.templates){
        return filetypes.test(cGroup);
     }
-    return filetypes.test(cGroup) || regEx.templateCheck.test(match);
+    if(regEx.templateCheck){
+      return filetypes.test(cGroup) || regEx.templateCheck.test(match);
+    } else {
+      return filetypes.test(cGroup);
+    }
  }
  function processLine(line, regEx, file){
      line = line.replace(regEx.exp, function(match){
