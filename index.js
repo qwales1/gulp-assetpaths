@@ -42,7 +42,7 @@
       captureGroup : 4,
       templateCheck : /(<\s*){0,1}(\bimg)(.*?)\bsrc\s*=\s*/
     },
-    { exp: /(:\s("(.*?)"))/gi,
+    { exp: /(:\s*("(.*?)"))/gi,
       captureGroup : 2,
       templateCheck: false
     }];

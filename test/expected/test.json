@@ -3,9 +3,9 @@
   "product_title" : "Super Widget",
   "main_product_image" : "https://www.newDomain.com/assets/images/super_widget.jpg",
   "secondary_images" : [
-    {"path": "https://www.newDomain.com/assets/images/super_widget1.jpg"},
+    {"path":"https://www.newDomain.com/assets/images/super_widget1.jpg"},
     {"path": "https://www.newDomain.com/assets/images/super_widget2.jpg"},
-    {"path": "https://www.newDomain.com/assets/images/super_widget3.jpg"},
+    {"path":"https://www.newDomain.com/assets/images/super_widget3.jpg"},
     {"path": "https://www.newDomain.com/assets/images/super_widget4.jpg"}]
 }
 {"product_id" : 3,"product_title" : "Super Widget","main_product_image" : "https://www.newDomain.com/assets/images/super_widget.jpg","secondary_images" : [{"path": "https://www.newDomain.com/assets/images/super_widget1.jpg"},{"path": "https://www.newDomain.com/assets/images/super_widget2.jpg"},{"path": "https://www.newDomain.com/assets/images/super_widget3.jpg"},{"path": "https://www.newDomain.com/assets/images/super_widget4.jpg"}]}
