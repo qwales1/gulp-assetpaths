@@ -12,7 +12,7 @@ Works for anything included with href, src, or url attributes
                       oldDomain : 'www.theolddomain.com',
                       docRoot : 'public_html',
                       filetypes : ['jpg','jpeg','png','ico','gif','js','css'],
-                      templates: true;
+                      templates: true
                      }))
                     .pipe(gulp.dest('../dist'));
         });
@@ -62,4 +62,3 @@ NOTE: This plugin assumes that any paths in a database or other other data sourc
 ``assets/images/image.png - FAIL``
 
 Again that is only for dynamically generated paths. All of those examples in code will be replaced correctly.
-
