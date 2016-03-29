@@ -55,7 +55,7 @@
 
  }
  function isRelative(string, insertIndex){
-  return (string.indexOf('/') === -1 || string.indexOf('/') > insertIndex) ? true : false;
+  return (string.indexOf('/') === -1 || string.indexOf('/') > insertIndex);
  }
  function getInsertIndex(string){
   if(string.search(/^.{0,1}\s*("|')/) !== -1){
