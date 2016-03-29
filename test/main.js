@@ -49,7 +49,7 @@ describe("gulp-assetpaths", function () {
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/nocss.css")
 	});
-  var oldDomainRel = new gutil.File({
+  	var oldDomainRel = new gutil.File({
 		path: "test/expected/oldDomainRel.html",
 		cwd: "test/",
 		base: "test/expected",
@@ -61,6 +61,14 @@ describe("gulp-assetpaths", function () {
 		base: "test/expected",
 		contents: fs.readFileSync("test/expected/test.json")
 	});
+	var expectedRemovePrefix = new gutil.File({
+		path: "test/expected/removeprefix.html",
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/removeprefix.html")
+	});
+	
+	
 	it("should produce expected file via buffer static", function (done) {
 
 		var srcFile = new gutil.File({
@@ -116,7 +124,6 @@ describe("gulp-assetpaths", function () {
 		});
 
 		stream.on("data", function (newFile) {
-
 			should.exist(newFile);
 			should.exist(newFile.contents);
 			String(newFile.contents).should.equal(String(expectedStaticNested.contents));
@@ -124,6 +131,37 @@ describe("gulp-assetpaths", function () {
 		});
 		stream.write(srcFile);
 		stream.end();
+	});
+	
+	it('should remove a prefix by passing an empty string for newDomain and docRoot', function(done){
+		var srcFile = new gutil.File({
+			path: "test/fixtures/removeprefix.html",
+			cwd: "test/",
+			base: "test/fixtures",
+			contents: fs.readFileSync("test/fixtures/removeprefix.html")
+		});
+		var stream = assetpaths(
+			{
+				oldDomain : 'http://www.somedomain.com/prefix',
+				newDomain : '',
+				docRoot : '',
+				filetypes : ['jpg', 'png', 'js', 'css'],
+				templates : true
+			}
+		);
+		stream.on("error", function(err) {
+			should.exist(err);
+			done(err);
+		});
+		stream.on("data", function (newFile) {
+			should.exist(newFile);
+			should.exist(newFile.contents);
+			String(newFile.contents).should.equal(String(expectedRemovePrefix.contents));
+			done();
+		});
+		stream.write(srcFile);
+		stream.end();
+		
 	});
 	it("should produce expected file via buffer", function (done) {
 
