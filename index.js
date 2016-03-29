@@ -13,13 +13,13 @@
    if (!opts.filetypes || (!opts.filetypes instanceof Array)){
      throw new gutil.PluginError("gulp-assetpaths", "Missing parameter : filetypes");
    }
-   if (!opts.newDomain){
+   if (typeof(opts.newDomain) !== 'string' && !opts.newDomain){
      throw new gutil.PluginError("gulp-assetpaths", "Missing parameter : newDomain");
    }
    if (!opts.oldDomain){
      throw new gutil.PluginError("gulp-assetpaths", "Missing parameter : oldDomain");
    }
-   if(!opts.docRoot){
+   if(typeof(opts.docRoot) !== 'string' && !opts.docRoot){
      throw new gutil.PluginError("gulp-assetpaths", "Missing parameter : docRoot");
    }
 
