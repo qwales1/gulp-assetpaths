@@ -26,6 +26,7 @@
     "email": "qwales1@gmail.com"
   },
   "dependencies": {
+    "gulp-regex-replace": "^0.2.3",
     "gulp-util": "^3.0.7",
     "through2": "^2.0.1"
   },
