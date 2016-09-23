@@ -22,20 +22,17 @@
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "bugs": {
-    "url" : "https://github.com/qwales1/gulp-assetpaths/issues",
-    "email" : "qwales1@gmail.com"
+    "url": "https://github.com/qwales1/gulp-assetpaths/issues",
+    "email": "qwales1@gmail.com"
   },
   "dependencies": {
-    "gulp-util": "~2.2.0",
-    "through2": "*"
+    "gulp-util": "^3.0.7",
+    "through2": "^2.0.1"
   },
   "devDependencies": {
-    "mocha": "*",
-    "coveralls": "*",
-    "mocha-lcov-reporter": "*",
-    "istanbul": "*",
-    "event-stream": "*",
-    "should": "~2.1.0"
+    "mocha": "^3.0.2",
+    "event-stream": "^3.3.4",
+    "should": "^11.1.0"
   },
   "engines": {
     "node": ">=0.8.0",
