@@ -12,6 +12,7 @@ Works for anything included with href, src, or url attributes
                       oldDomain : 'www.theolddomain.com',
                       docRoot : 'public_html',
                       filetypes : ['jpg','jpeg','png','ico','gif','js','css'],
+					  customAttributes: ['data-custom'],
                       templates: true
                      }))
                     .pipe(gulp.dest('../dist'));
