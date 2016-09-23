@@ -3,20 +3,22 @@ gulp-assetpaths
 
 Change paths of assets from one environment to another
 Works for anything included with href, src, or url attributes
+```javascript
+var assetpaths = require('gulp-assetpaths');
 
-      var assetpaths = require('gulp-assetpaths');
-        gulp.task('path-alter', function(){
-            return gulp.src(['./*.html'])
-                    .pipe(assetpaths({
-                      newDomain: 'www.thenewdomain.com',
-                      oldDomain : 'www.theolddomain.com',
-                      docRoot : 'public_html',
-                      filetypes : ['jpg','jpeg','png','ico','gif','js','css'],
-					  customAttributes: ['data-custom'],
-                      templates: true
-                     }))
-                    .pipe(gulp.dest('../dist'));
-        });
+gulp.task('change-paths', function(){
+  return gulp.src(['./*.html'])
+    .pipe(assetpaths({
+      newDomain: 'www.thenewdomain.com',
+      oldDomain : 'www.theolddomain.com',
+      docRoot : 'public_html',
+      filetypes : ['jpg','jpeg','png','ico','gif','js','css'],
+      customAttributes: ['data-custom'],
+      templates: true
+     }))
+     .pipe(gulp.dest('../dist'));
+});
+```
         
 ### options.newDomain - string
 
@@ -32,11 +34,16 @@ this will anchor all relative paths to the document root of your project. An exa
 ``url(images/example.png)`` in a selector. All the directories up to the document root will be prepended to the images/example.png path giving you:
 ``url(http://www.thenewdomain.com/css/images/example.png)``
 
+### options.customAttributes
+
+an array of custom attributes you want to replace the paths of
+Ex. `<img data-custom="/image.png" />`
+
 ### options.templates - boolean (true by default)
 
 If this option is false, only paths to filetypes that are explicitly in the filetypes array will be replaced.
 
-If ture, it will attempt to replace paths to static assets in templates. These paths will be changed : 
+If true, it will attempt to replace paths to static assets in templates. These paths will be changed : 
 
 all image tags 
 all css background or background-image properties
