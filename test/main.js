@@ -368,6 +368,7 @@ describe("gulp-assetpaths", function () {
 		stream.write(srcFile);
 		stream.end();
 	});
+
 	it("should error on stream", function (done) {
 
 		var srcFile = new gutil.File({
@@ -376,12 +377,14 @@ describe("gulp-assetpaths", function () {
 			base: "test/fixtures",
 			contents: fs.createReadStream("test/fixtures/dynamicpaths.html")
 		});
-		var stream = assetpaths(
-			    {oldDomain : 'www.oldDomain.com',
-				 newDomain : 'https://www.newDomain.com',
-				 docRoot : 'test',
-				 filetypes : ['jpg', 'png', 'js', 'css']
-				});
+
+		var stream = assetpaths({
+			oldDomain : 'www.oldDomain.com',
+			newDomain : 'https://www.newDomain.com',
+			docRoot : 'test',
+			filetypes : ['jpg', 'png', 'js', 'css']
+		});
+
 		stream.on("error", function(err) {
 			should.exist(err);
 			done();
@@ -397,41 +400,44 @@ describe("gulp-assetpaths", function () {
 		stream.end();
 	});
 
-
-
-
-
-	/*
-	it("should produce expected file via stream", function (done) {
+	it('should replace custom attributes', function(done){
 
 		var srcFile = new gutil.File({
-			path: "test/fixtures/hello.txt",
+			path: "test/fixtures/customattrs.html",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: fs.createReadStream("test/fixtures/hello.txt")
+			contents: fs.readFileSync("test/fixtures/customattrs.html")
 		});
 
-		var stream = pathAlter("World");
+		var expected = new gutil.File({
+			path: "test/expected/customattrs.html",
+			cwd: "test/",
+			base: "test/expected",
+			contents: fs.readFileSync("test/expected/customattrs.html")
+		});
+
+		var stream = assetpaths({
+			oldDomain : 'www.oldDomain.com',
+			newDomain : 'https://www.newDomain.com',
+			docRoot : 'test',
+			filetypes : ['jpg', 'png', 'js', 'css'],
+			templates: true,
+			customAttributes: ['data-custom']
+		});
 
 		stream.on("error", function(err) {
 			should.exist(err);
-			done();
+			done(err);
 		});
 
 		stream.on("data", function (newFile) {
-
 			should.exist(newFile);
 			should.exist(newFile.contents);
-
-			newFile.contents.pipe(es.wait(function(err, data) {
-				should.not.exist(err);
-				data.should.equal(String(expectedFile.contents));
-				done();
-			}));
+			String(newFile.contents).should.equal(String(expected.contents));
+			done();
 		});
 
 		stream.write(srcFile);
 		stream.end();
 	});
-	*/
 });
