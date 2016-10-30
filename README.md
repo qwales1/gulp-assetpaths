@@ -1,5 +1,6 @@
 gulp-assetpaths
 ===============
+[![Build Status](https://travis-ci.org/qwales1/gulp-assetpaths.svg?branch=master)](https://travis-ci.org/qwales1/gulp-assetpaths)
 
 Change paths of assets from one environment to another
 Works for anything included with href, src, or url attributes
