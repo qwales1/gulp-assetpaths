@@ -1,6 +1,6 @@
 {
   "name": "gulp-assetpaths",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A Gulp plugin to change asset paths from one environment to another.",
   "keywords": [
     "gulpplugin",
