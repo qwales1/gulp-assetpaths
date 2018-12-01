@@ -2,7 +2,6 @@ var PluginError = require('plugin-error');
 var through = require('through2');
 
 module.exports = function(opts) {
-	'use strict';
 	var rootRegEx;
 
 	if (!opts) {
