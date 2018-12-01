@@ -29,7 +29,7 @@
     "through2": "^3.0.0"
   },
   "devDependencies": {
-    "event-stream": "^4.0.1",
+    "event-stream": "3.3.4",
     "mocha": "^5.2.0",
     "should": "^13.2.3",
     "vinyl": "^2.2.0"
